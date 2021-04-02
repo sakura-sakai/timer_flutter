@@ -27,10 +27,12 @@ class HomeCubit extends Cubit<HomeState> {
 
 
   void startTimer() {
-    _timer = new Timer.periodic(timeStep, (Timer timer) {
-      counter++;
-      emit(Counted());
-    });
+    if(_timer == null){
+      _timer = new Timer.periodic(timeStep, (Timer timer) {
+        counter++;
+        emit(Counted());
+      });
+    }
   }
 
   Future<void> resetCounter() async {
@@ -55,6 +57,7 @@ class HomeCubit extends Cubit<HomeState> {
   void totalCountedBackground({DateTime exitTime}) {
     int totalMill = DateTime.now().difference(exitTime).inMilliseconds;
     counter+= totalMill ~/ timeStep.inMilliseconds;
+    startTimer();
   }
 
   void dispose() {
